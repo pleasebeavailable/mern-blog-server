@@ -38,3 +38,21 @@ router.route("/getAll").get(async function (req, res) {
     })
   })
 });
+
+router.route("/section/getAll").post(async function (req, res) {
+
+  MongoClient.connect(uri, function (err, db) {
+    if (err) {
+      throw err;
+    }
+    var dbo = db.db("blog-db");
+    dbo.collection("posts").find({section: req.body.params.section}).toArray(
+        function (err, result) {
+          console.log(result)
+          if (err) {
+            res.status(400).send("Error fetching sections!");
+          }
+          res.json(result);
+        })
+  })
+});
