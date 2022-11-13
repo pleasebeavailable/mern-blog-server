@@ -49,7 +49,7 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  const {email, password} = req.body.user;
+  const {email, password} = req.body.user.payload;
   // check if the user exists
   try {
     MongoClient.connect(uri, async (err, db) => {
@@ -81,7 +81,7 @@ router.post('/login', async (req, res) => {
                   if (err) {
                     throw err;
                   }
-                  res.json({token: token, success: true});
+                  res.json({token: token, success: true, user: response});
                 });
           })
       .catch(err => console.log(err))
