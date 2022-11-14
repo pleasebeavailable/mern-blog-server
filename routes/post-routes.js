@@ -73,7 +73,6 @@ router.route("/getPostComments/:postId").get(async function (req, res) {
       if (err) {
         res.status(400).send("Error fetching posts!");
       }
-      console.log(result)
       res.json(result);
     })
   })
