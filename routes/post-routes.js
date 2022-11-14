@@ -90,7 +90,6 @@ router.route("/deleteComment/:commentId").delete(async function (req, res) {
     var dbo = db.db("blog-db");
     dbo.collection("comments").deleteOne({_id: mongo.ObjectId(commentId)}).then(
         result => {
-          console.log(result)
           res.status(200).json(result);
         }).catch(
         err => res.status(400).json({message: err.message}));
@@ -106,7 +105,6 @@ router.route("/section/getAll").post(async function (req, res) {
     var dbo = db.db("blog-db");
     dbo.collection("posts").find({section: req.body.params.section}).toArray(
         function (err, result) {
-          console.log(result)
           if (err) {
             res.status(400).send("Error fetching sections!");
           }

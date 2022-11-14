@@ -59,7 +59,6 @@ router.post('/login', async (req, res) => {
       var dbo = db.db("blog-db");
       dbo.collection("users").findOne({email: email}).then(
           async response => {
-            console.log(response)
             if (response == null) {
               return res.status(200).json({msg: 'User does not exist'});
             }
