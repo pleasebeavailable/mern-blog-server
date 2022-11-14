@@ -2,6 +2,7 @@ const Post = require("../model/post");
 const PostComment = require("../model/post_comment");
 const MongoClient = require('mongodb').MongoClient;
 const express = require("express");
+const {mongo} = require("mongoose");
 const router = express.Router();
 module.exports = router;
 
@@ -69,12 +70,30 @@ router.route("/getPostComments/:postId").get(async function (req, res) {
       throw err;
     }
     var dbo = db.db("blog-db");
-    dbo.collection("comments").find({post_id: postId}).toArray(function (err, result) {
-      if (err) {
-        res.status(400).send("Error fetching posts!");
-      }
-      res.json(result);
-    })
+    dbo.collection("comments").find({post_id: postId}).toArray(
+        function (err, result) {
+          if (err) {
+            res.status(400).send("Error fetching posts!");
+          }
+          res.json(result);
+        })
+  })
+});
+
+router.route("/deleteComment/:commentId").delete(async function (req, res) {
+  const commentId = req.params.commentId;
+
+  MongoClient.connect(uri, function (err, db) {
+    if (err) {
+      throw err;
+    }
+    var dbo = db.db("blog-db");
+    dbo.collection("comments").deleteOne({_id: mongo.ObjectId(commentId)}).then(
+        result => {
+          console.log(result)
+          res.status(200).json(result);
+        }).catch(
+        err => res.status(400).json({message: err.message}));
   })
 });
 
