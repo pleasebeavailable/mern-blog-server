@@ -10,7 +10,7 @@ module.exports = router;
 const uri = process.env.ATLAS_URI;
 
 router.post('/register', (req, res) => {
-  const {username, email, password} = req.body.user;
+  const {username, email, password} = req.body.user.payload;
   MongoClient.connect(uri, async (err, db) => {
     if (err) {
       throw err;
