@@ -9,17 +9,22 @@ module.exports = router;
 const uri = process.env.ATLAS_URI;
 
 // Post Method
-router.post("/post", async (req, res) => {
-  const post = new Post({
-    title: req.body.title,
-    date: req.date,
-    description: req.description,
-    image: req.image,
-    imageLabel: req.imageLabel
-  });
+router.post("/createNewPost", async (req, res) => {
+  const post = {
+    author: req.body.payload.author,
+    title: req.body.payload.title,
+    description: req.body.payload.description
+  };
   try {
-    const data = await res.save(post);
-    res.status(200).json(data);
+    MongoClient.connect(uri, function (err, db) {
+      if (err) {
+        throw err;
+      }
+      var dbo = db.db("blog-db");
+      dbo.collection("posts").insertOne(post).then(
+          result => res.status(200).json(result)).catch(
+          err => res.status(400).json({message: err.message}));
+    });
   } catch (error) {
     res.status(400).json({message: error.message});
   }
