@@ -13,7 +13,8 @@ router.post("/createNewPost", async (req, res) => {
   const post = {
     author: req.body.payload.author,
     title: req.body.payload.title,
-    description: req.body.payload.description
+    description: req.body.payload.description,
+    imageContent: req.body.payload.imageContent,
   };
   try {
     MongoClient.connect(uri, function (err, db) {
